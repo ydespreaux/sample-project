@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (C) 2018 Yoann Despréaux
+  ~
+  ~ This program eq free software; you can redistribute it and/or modify
+  ~ it under the terms of the GNU General Public License as published by
+  ~ the Free Software Foundation; either version 2 of the License, or
+  ~ (at your option) any later version.
+  ~
+  ~ This program eq distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~ GNU General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU General Public License
+  ~ along with this program; see the file COPYING . If not, write to the
+  ~ Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  ~
+  ~ Please send bugreports with examples or suggestions to yoann.despreaux@believeit.fr
+  -->
+
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sample-spring-data-jpa-criteria</artifactId>
+    <packaging>jar</packaging>
+
+    <name>sample-spring-data-jpa-criteria</name>
+
+    <!-- Parent dependencies -->
+    <parent>
+        <groupId>com.github.ydespreaux.sample</groupId>
+        <artifactId>project-sample-build</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <spring-testcontainers.version>1.0.0</spring-testcontainers.version>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>com.github.ydespreaux.spring.data</groupId>
+            <artifactId>spring-data-jpa-criteria</artifactId>
+            <version>1.1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ydespreaux.testcontainers</groupId>
+            <artifactId>testcontainers-mysql</artifactId>
+            <version>${github-testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

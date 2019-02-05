@@ -1,0 +1,16 @@
+spring:
+  elasticsearch:
+    jest:
+      connection-timeout: 5000ms
+      read-timeout: 6000ms
+      username: elastic
+      password: changeme
+    template:
+      action: CREATE_OR_UPDATE
+      scripts: classpath:templates/congress.template
+    index-pattern:
+      congress: "'congress-'yyyy"
+    aliases:
+      congress: congress
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
