@@ -71,14 +71,14 @@ public class SongRestController {
         if (pageable.getSort().isUnsorted()) {
             pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "title"));
         }
-        return ResponseEntity.ok(this.repository.findAll(criteria, pageable, new QueryOptions().withAssociation("album", "album.artist")).map(this::generateDetail));
+        return ResponseEntity.ok(this.repository.findAll(criteria, pageable, new QueryOptions().withAssociation("album", "album.artist")).map(this::mapDetail));
     }
 
     /**
      * @param song
      * @return
      */
-    private SongDetail generateDetail(Song song) {
+    private SongDetail mapDetail(Song song) {
         return SongDetail.builder()
                 .id(song.getId())
                 .artist(song.getAlbum().getArtist().getDisplayName())

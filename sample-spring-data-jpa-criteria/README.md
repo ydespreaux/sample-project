@@ -147,7 +147,7 @@ public class JpaConfiguration {
 }
 ```
 
-### Add a rest controller for tests
+### Add a rest controller
 
 ```java
 @RestController
@@ -158,33 +158,38 @@ public class SongRestController {
     private SongRepository repository;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<SongDetail>> findSongByQuery(
+    public ResponseEntity<Page<SongRestController.SongDetail>> findSongByQuery(
+            @RequestParam(required = false, value = "title") String title,
             @RequestParam(required = false, value = "artist") String artist,
+            @RequestParam(required = false, value = "album") String album,
             @RequestParam(required = false, value = "year") Integer year,
-            @RequestParam(required = false, value = "title") String title) {
+            Pageable pageable) {
 
         Criteria criteria = new Criteria();
+        if (StringUtils.hasText(title)) {
+            criteria = criteria.and("title").contains(title);
+        }
         if (StringUtils.hasText(artist)) {
             criteria = criteria.and("album.artist.displayName").contains(artist);
         }
-        if (StringUtils.hasText(title)) {
-            criteria = criteria.and("title").contains(title);
+        if (StringUtils.hasText(album)) {
+            criteria = criteria.and("album.title").contains(album);
         }
         if (year != null) {
             criteria = criteria.and("album.year").eq(year);
         }
-        return ResponseEntity.ok(this.repository.findAll(criteria, new QueryOptions().withAssociation("album", "album.artist"))
-                .stream()
-                .map(this::generateDetail)
-                .collect(Collectors.toList()));
+        // Add the default sort if the pageable is unsorted
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "title"));
+        }
+        return ResponseEntity.ok(this.repository.findAll(criteria, pageable, new QueryOptions().withAssociation("album", "album.artist")).map(this::mapDetail));
     }
 
     /**
-     *
      * @param song
      * @return
      */
-    private SongDetail generateDetail(Song song) {
+    private SongDetail mapDetail(Song song) {
         return SongDetail.builder()
                 .id(song.getId())
                 .artist(song.getAlbum().getArtist().getDisplayName())
@@ -211,7 +216,58 @@ public class SongRestController {
 ## Run application
 
 ```bash
-mvn clean install -DskipTests
+mvn clean install
 mvn spring-boot:run
+```
+
+Search all songs containing '400 years' in the title of the song
+
+```bash
+curl http://localhost:8080/api/songs?title=400%20years
+{
+    "content": [
+        {
+            "id": 27,
+            "artist": "Bob Marley and the Wailers",
+            "album": "Catch a Fire",
+            "year": 1973,
+            "track": 3,
+            "title": "400 Years"
+        },
+        {
+            "id": 21,
+            "artist": "Bob Marley and the Wailers",
+            "album": "Soul Rebels",
+            "year": 1970,
+            "track": 9,
+            "title": "400 Years"
+        }
+    ],
+    "pageable": {
+        "sort": {
+            "sorted": true,
+            "unsorted": false,
+            "empty": false
+        },
+        "offset": 0,
+        "pageSize": 20,
+        "pageNumber": 0,
+        "unpaged": false,
+        "paged": true
+    },
+    "totalElements": 2,
+    "totalPages": 1,
+    "last": true,
+    "size": 20,
+    "number": 0,
+    "sort": {
+        "sorted": true,
+        "unsorted": false,
+        "empty": false
+    },
+    "numberOfElements": 2,
+    "first": true,
+    "empty": false
+}
 ```
 
