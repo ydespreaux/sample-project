@@ -27,6 +27,10 @@ import com.github.ydespreaux.spring.data.jpa.query.QueryOptions;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -34,9 +38,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/songs")
@@ -46,25 +47,31 @@ public class SongRestController {
     private SongRepository repository;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<SongDetail>> findSongByQuery(
+    public ResponseEntity<Page<SongRestController.SongDetail>> findSongByQuery(
+            @RequestParam(required = false, value = "title") String title,
             @RequestParam(required = false, value = "artist") String artist,
+            @RequestParam(required = false, value = "album") String album,
             @RequestParam(required = false, value = "year") Integer year,
-            @RequestParam(required = false, value = "title") String title) {
+            Pageable pageable) {
 
         Criteria criteria = new Criteria();
+        if (StringUtils.hasText(title)) {
+            criteria = criteria.and("title").contains(title);
+        }
         if (StringUtils.hasText(artist)) {
             criteria = criteria.and("album.artist.displayName").contains(artist);
         }
-        if (StringUtils.hasText(title)) {
-            criteria = criteria.and("title").contains(title);
+        if (StringUtils.hasText(album)) {
+            criteria = criteria.and("album.title").contains(album);
         }
         if (year != null) {
             criteria = criteria.and("album.year").eq(year);
         }
-        return ResponseEntity.ok(this.repository.findAll(criteria, new QueryOptions().withAssociation("album", "album.artist"))
-                .stream()
-                .map(this::generateDetail)
-                .collect(Collectors.toList()));
+        // Add the default sort if the pageable is unsorted
+        if (pageable.getSort().isUnsorted()) {
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.ASC, "title"));
+        }
+        return ResponseEntity.ok(this.repository.findAll(criteria, pageable, new QueryOptions().withAssociation("album", "album.artist")).map(this::generateDetail));
     }
 
     /**

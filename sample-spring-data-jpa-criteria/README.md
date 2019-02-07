@@ -132,7 +132,7 @@ public interface AlbumRepository extends JpaCriteriaRepository<Album, Integer> {
 ```
 
 ```java
-public interface SongRepository extends JpaRepository<Song, Integer> {
+public interface SongRepository extends JpaCriteriaRepository<Song, Integer> {
 }
 ```
 
@@ -208,8 +208,10 @@ public class SongRestController {
 }
 ```
 
-## Samples
+## Run application
 
-Sample with Spring Boot and embedded database H2 :
+```bash
+mvn clean install -DskipTests
+mvn spring-boot:run
+```
 
-https://github.com/ydespreaux/sample-project/tree/master/sample-spring-data-jpa-criteria
