@@ -10,7 +10,7 @@ Spring Data JPA with criteria implementation
 <dependency>
     <groupId>com.github.ydespreaux.spring.data</groupId>
     <artifactId>spring-data-jpa-criteria</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
 </dependency>
 ```
 

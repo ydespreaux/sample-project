@@ -18,40 +18,10 @@
  * Please send bugreports with examples or suggestions to yoann.despreaux@believeit.fr
  */
 
-package com.github.ydespreaux.sample.jpa.criteria.domain;
+package com.github.ydespreaux.sample.jpa.criteria.repository;
 
-import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import com.github.ydespreaux.sample.jpa.criteria.domain.Track;
+import com.github.ydespreaux.spring.data.jpa.repository.support.JpaCriteriaRepository;
 
-import javax.persistence.*;
-
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Entity
-@Table(name = "SONG")
-public class Song {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(
-            name = "native",
-            strategy = "native"
-    )
-    private Integer id;
-
-    @Column(name = "TRACK", nullable = false)
-    private Integer track;
-
-    @Column(name = "TITLE", nullable = false, length = 150)
-    private String title;
-
-    /**
-     * the workstations property.
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ALBUM_ID", foreignKey = @ForeignKey(name = "FK_SONG_ALBUM_ID"))
-    private Album album;
+public interface TrackRepository extends JpaCriteriaRepository<Track, Integer> {
 }

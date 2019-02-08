@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {SampleJpaCriteriaApplication.class})
 @AutoConfigureMockMvc
-public class SongRestControllerTest {
+public class TrackRestControllerTest {
 
     @Autowired
     private MockMvc mvc;
@@ -55,7 +55,7 @@ public class SongRestControllerTest {
 
     @Test
     public void findSongByQuery_withArtist() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/songs")
+        mvc.perform(MockMvcRequestBuilders.get("/api/tracks")
                 .param("artist", "Marley")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -66,7 +66,7 @@ public class SongRestControllerTest {
 
     @Test
     public void findSongByQuery_withAlbum() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/songs")
+        mvc.perform(MockMvcRequestBuilders.get("/api/tracks")
                 .param("album", "voodoo")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -77,7 +77,7 @@ public class SongRestControllerTest {
 
     @Test
     public void findSongByQuery_withYear() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/songs")
+        mvc.perform(MockMvcRequestBuilders.get("/api/tracks")
                 .param("year", "1970")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -88,7 +88,7 @@ public class SongRestControllerTest {
 
     @Test
     public void findSongByQuery_withTitle() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/songs")
+        mvc.perform(MockMvcRequestBuilders.get("/api/tracks")
                 .param("title", "400 years")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -99,7 +99,7 @@ public class SongRestControllerTest {
 
     @Test
     public void findSongByQuery_withAllCriteria() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/songs")
+        mvc.perform(MockMvcRequestBuilders.get("/api/tracks")
                 .param("title", "400 years")
                 .param("artist", "Marley")
                 .param("year", "1973")

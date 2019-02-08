@@ -56,17 +56,17 @@ public class Album {
     private Artist artist;
 
     @OneToMany(mappedBy = "album", cascade = {CascadeType.ALL})
-    private List<Song> songs;
+    private List<Track> tracks;
 
     /**
-     * @param song
+     * @param track
      */
-    public void addSong(Song song) {
-        if (this.songs == null) {
-            this.songs = new ArrayList<>();
+    public void addTrack(Track track) {
+        if (this.tracks == null) {
+            this.tracks = new ArrayList<>();
         }
-        this.songs.add(song);
-        song.setAlbum(this);
+        this.tracks.add(track);
+        track.setAlbum(this);
     }
 
     @Override

@@ -20,8 +20,8 @@
 
 package com.github.ydespreaux.sample.jpa.criteria.controller;
 
-import com.github.ydespreaux.sample.jpa.criteria.domain.Song;
-import com.github.ydespreaux.sample.jpa.criteria.repository.SongRepository;
+import com.github.ydespreaux.sample.jpa.criteria.domain.Track;
+import com.github.ydespreaux.sample.jpa.criteria.repository.TrackRepository;
 import com.github.ydespreaux.spring.data.jpa.query.Criteria;
 import com.github.ydespreaux.spring.data.jpa.query.QueryOptions;
 import lombok.Builder;
@@ -40,14 +40,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/songs")
-public class SongRestController {
+@RequestMapping("/api/tracks")
+public class TrackRestController {
 
     @Autowired
-    private SongRepository repository;
+    private TrackRepository repository;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Page<SongRestController.SongDetail>> findSongByQuery(
+    public ResponseEntity<Page<TrackRestController.SongDetail>> findSongByQuery(
             @RequestParam(required = false, value = "title") String title,
             @RequestParam(required = false, value = "artist") String artist,
             @RequestParam(required = false, value = "album") String album,
@@ -75,17 +75,17 @@ public class SongRestController {
     }
 
     /**
-     * @param song
+     * @param track
      * @return
      */
-    private SongDetail mapDetail(Song song) {
+    private SongDetail mapDetail(Track track) {
         return SongDetail.builder()
-                .id(song.getId())
-                .artist(song.getAlbum().getArtist().getDisplayName())
-                .album(song.getAlbum().getTitle())
-                .year(song.getAlbum().getYear())
-                .track(song.getTrack())
-                .title(song.getTitle())
+                .id(track.getId())
+                .artist(track.getAlbum().getArtist().getDisplayName())
+                .album(track.getAlbum().getTitle())
+                .year(track.getAlbum().getYear())
+                .track(track.getTrack())
+                .title(track.getTitle())
                 .build();
     }
 
