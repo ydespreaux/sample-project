@@ -19,25 +19,8 @@
  *
  */
 
-package com.github.ydespreaux.sample.elasticsearch.model;
+package com.github.ydespreaux.sample.elasticsearch.model.enums;
 
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.Alias;
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.Index;
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.IndexedDocument;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
-
-@Getter
-@Setter
-@IndexedDocument(
-        alias = @Alias(name = "labels-alias"),
-        index = @Index(name = "labels", type = "label")
-)
-public class Label {
-
-    @Id
-    private String id;
-    private String name;
-    private String country;
+public enum ArtistTypeEnum {
+    Person, Group, Orchestra, Choir, Character, Other
 }

@@ -21,23 +21,29 @@
 
 package com.github.ydespreaux.sample.elasticsearch.model;
 
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.Alias;
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.Index;
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.IndexedDocument;
+import com.github.ydespreaux.spring.data.elasticsearch.annotations.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-@IndexedDocument(
-        alias = @Alias(name = "labels-alias"),
-        index = @Index(name = "labels", type = "label")
+@RolloverDocument(
+        alias = @Alias(name = "read-tracks"),
+        index = @Index(name = "tracks", type = "track"),
+        rollover = @Rollover(
+                alias = @Alias(name = "write-tracks"),
+                maxSize = "10gb",
+                trigger = @Trigger(enabled = true)
+        )
 )
-public class Label {
+public class Track {
 
     @Id
     private String id;
+
     private String name;
-    private String country;
+    private Integer number;
+    private Integer length;
+
 }

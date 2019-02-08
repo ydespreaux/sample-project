@@ -21,9 +21,23 @@
 
 package com.github.ydespreaux.sample.elasticsearch.model;
 
+import com.github.ydespreaux.sample.elasticsearch.model.enums.ArtistTypeEnum;
+import com.github.ydespreaux.sample.elasticsearch.model.enums.GenderEnum;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.annotation.Id;
+
+@Getter
+@Setter
 public class Artist {
+
+    @Id
+    private String id;
 
     private String name;
     private String shortName;
+    private ArtistTypeEnum type;
+    private GenderEnum gender;
+
 
 }

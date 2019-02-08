@@ -16,26 +16,20 @@
  * Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Please send bugreports with examples or suggestions to yoann.despreaux@believeit.fr
- *
  */
 
 package com.github.ydespreaux.sample.elasticsearch.model;
 
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
-@RolloverDocument(
-        alias = @Alias(name = "read-songs"),
-        index = @Index(name = "songs", type = "song"),
-        rollover = @Rollover(
-                alias = @Alias(name = "write-songs"),
-                maxSize = "10gb",
-                trigger = @Trigger(enabled = true)
-        )
-)
-public class Song {
+public class Album {
 
+    @Id
+    private String id;
+
+    private String name;
 }
