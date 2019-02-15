@@ -33,7 +33,7 @@ import lombok.Setter;
         rollover = @Rollover(
                 alias = @Alias(name = "write-tracks"),
                 maxSize = "10gb",
-                trigger = @Trigger(enabled = true)
+                trigger = @Trigger(true)
         )
 )
 public class Track {

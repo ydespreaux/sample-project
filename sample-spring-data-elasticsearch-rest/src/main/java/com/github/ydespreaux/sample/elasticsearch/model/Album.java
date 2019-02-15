@@ -37,7 +37,7 @@ import java.util.List;
         rollover = @Rollover(
                 alias = @Alias(name = "write-albums"),
                 maxSize = "50kb",
-                trigger = @Trigger(enabled = true)
+                trigger = @Trigger(true)
         )
 )
 public class Album {

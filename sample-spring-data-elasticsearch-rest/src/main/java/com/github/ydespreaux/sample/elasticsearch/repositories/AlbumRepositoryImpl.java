@@ -23,6 +23,7 @@ package com.github.ydespreaux.sample.elasticsearch.repositories;
 import com.github.ydespreaux.sample.elasticsearch.model.Album;
 import com.github.ydespreaux.spring.data.elasticsearch.core.ElasticsearchOperations;
 import com.github.ydespreaux.spring.data.elasticsearch.core.completion.EntitySuggestExtractor;
+import com.github.ydespreaux.spring.data.elasticsearch.core.query.SuggestQuery;
 import org.elasticsearch.common.unit.Fuzziness;
 import org.elasticsearch.search.suggest.SuggestBuilder;
 import org.elasticsearch.search.suggest.SuggestBuilders;
@@ -39,9 +40,8 @@ public class AlbumRepositoryImpl implements AlbumRepositoryCustom {
     @Override
     public List<Album> suggest(String query) {
         SuggestionBuilder completionSuggestionFuzzyBuilder = SuggestBuilders.completionSuggestion("suggests").prefix(query, Fuzziness.AUTO);
-        List<Album> suggests = template.suggest(new SuggestBuilder().addSuggestion("suggest-albums", completionSuggestionFuzzyBuilder),
+        return template.suggest(new SuggestQuery(new SuggestBuilder().addSuggestion("suggest-albums", completionSuggestionFuzzyBuilder)),
                 Album.class,
                 new EntitySuggestExtractor<>(Album.class, template.getResultsMapper()));
-        return suggests;
     }
 }
