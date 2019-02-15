@@ -1,0 +1,37 @@
+{
+    "settings" : {
+        "number_of_shards" : 1,
+        "refresh_interval" : "1s",
+        "number_of_replicas" : 1,
+        "store.type": "fs"
+    },
+    "aliases" : {
+        "read-artists" : {}
+    },
+    "mappings": {
+      "artist": {
+        "properties": {
+          "name": {
+            "type": "text",
+            "fielddata": true,
+            "copy_to": "search_fields"
+          },
+          "shortName": {
+            "type": "text",
+            "copy_to": "search_fields"
+          },
+          "type": {
+            "type": "keyword",
+            "copy_to": "search_fields"
+          },
+          "gender": {
+            "type": "keyword",
+            "copy_to": "search_fields"
+          },
+          "search_fields": {
+            "type": "text"
+          }
+        }
+      }
+    }
+}

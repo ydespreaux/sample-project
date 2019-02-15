@@ -16,30 +16,15 @@
  * Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Please send bugreports with examples or suggestions to yoann.despreaux@believeit.fr
- *
  */
 
-package com.github.ydespreaux.sample.elasticsearch.model;
+package com.github.ydespreaux.sample.elasticsearch.repositories;
 
-import com.github.ydespreaux.spring.data.elasticsearch.annotations.*;
-import lombok.Getter;
-import lombok.Setter;
+import com.github.ydespreaux.sample.elasticsearch.model.Album;
 
-@Getter
-@Setter
-@RolloverDocument(
-        alias = @Alias(name = "read-tracks"),
-        index = @Index(name = "tracks", type = "track"),
-        rollover = @Rollover(
-                alias = @Alias(name = "write-tracks"),
-                maxSize = "10gb",
-                trigger = @Trigger(enabled = true)
-        )
-)
-public class Track {
+import java.util.List;
 
-    private String name;
-    private Integer number;
-    private Integer length;
+public interface AlbumRepositoryCustom {
 
+    List<Album> suggest(String query);
 }

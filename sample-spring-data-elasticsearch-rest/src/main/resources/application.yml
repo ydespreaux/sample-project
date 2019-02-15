@@ -1,0 +1,18 @@
+#
+# Configuration Elasticsearch
+#
+spring:
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+      username: elastic
+      password: changeme
+    template:
+      action: CREATE_OR_UPDATE
+      scripts: classpath:settings/templates/labels.template
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+
+logging:
+  level:
+    com.github.ydespreaux.spring.data.elasticsearch.client.ClientLogger: TRACE

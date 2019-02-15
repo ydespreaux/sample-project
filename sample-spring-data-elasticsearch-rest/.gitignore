@@ -1,0 +1,10 @@
+.classpath
+.project
+target/
+bin/
+.settings/
+.idea/
+docker/elasticsearch/data
+docker/elasticsearch/logs
+*.iml
+

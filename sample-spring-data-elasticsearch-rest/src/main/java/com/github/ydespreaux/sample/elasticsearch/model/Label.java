@@ -16,7 +16,6 @@
  * Free Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  *
  * Please send bugreports with examples or suggestions to yoann.despreaux@believeit.fr
- *
  */
 
 package com.github.ydespreaux.sample.elasticsearch.model;
@@ -31,13 +30,14 @@ import org.springframework.data.annotation.Id;
 @Getter
 @Setter
 @IndexedDocument(
-        alias = @Alias(name = "labels-alias"),
-        index = @Index(name = "labels", type = "label")
-)
+        alias = @Alias(name = "alias_labels"),
+        index = @Index(indexPattern = "labels-%s", indexTimeBasedSupport = LabelTimeBasedSupport.class, type = "label"))
 public class Label {
 
     @Id
     private String id;
+
     private String name;
-    private String country;
+    private String description;
+    private String zone;
 }

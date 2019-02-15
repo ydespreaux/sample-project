@@ -23,12 +23,18 @@ package com.github.ydespreaux.sample.elasticsearch.model;
 
 import com.github.ydespreaux.sample.elasticsearch.model.enums.ArtistTypeEnum;
 import com.github.ydespreaux.sample.elasticsearch.model.enums.GenderEnum;
+import com.github.ydespreaux.spring.data.elasticsearch.annotations.Alias;
+import com.github.ydespreaux.spring.data.elasticsearch.annotations.Index;
+import com.github.ydespreaux.spring.data.elasticsearch.annotations.IndexedDocument;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
+@IndexedDocument(
+        alias = @Alias(name = "read-artists"),
+        index = @Index(name = "artists", type = "artist", settingsAndMappingPath = "classpath:settings/indices/artist.index"))
 public class Artist {
 
     @Id

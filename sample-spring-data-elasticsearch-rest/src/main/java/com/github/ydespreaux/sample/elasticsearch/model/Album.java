@@ -20,16 +20,36 @@
 
 package com.github.ydespreaux.sample.elasticsearch.model;
 
+import com.github.ydespreaux.spring.data.elasticsearch.annotations.*;
+import com.github.ydespreaux.spring.data.elasticsearch.core.completion.Completion;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Getter
 @Setter
+@RolloverDocument(
+        alias = @Alias(name = "read-albums"),
+        index = @Index(name = "albums", type = "album", settingsAndMappingPath = "classpath:settings/indices/albums.index"),
+        rollover = @Rollover(
+                alias = @Alias(name = "write-albums"),
+                maxSize = "50kb",
+                trigger = @Trigger(enabled = true)
+        )
+)
 public class Album {
 
     @Id
     private String id;
 
+    private String artistId;
+
     private String name;
+    private LocalDate publication;
+    private List<Track> tracks;
+
+    private List<Completion> suggests;
 }
