@@ -22,6 +22,7 @@ package com.github.ydespreaux.sample.elasticsearch.web.rest;
 
 import com.github.ydespreaux.sample.elasticsearch.model.Artist;
 import com.github.ydespreaux.sample.elasticsearch.repositories.ArtistRepository;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -41,8 +42,11 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.List;
 
+import static com.github.ydespreaux.sample.elasticsearch.web.config.SwaggerConfig.TAG_ARTISTS;
+
 @RestController
 @RequestMapping("/api/artists")
+@Api(tags = TAG_ARTISTS)
 public class ArtistRestController {
 
     @Autowired

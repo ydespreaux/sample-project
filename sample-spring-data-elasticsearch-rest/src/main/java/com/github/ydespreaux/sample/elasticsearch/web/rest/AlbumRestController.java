@@ -22,6 +22,7 @@ package com.github.ydespreaux.sample.elasticsearch.web.rest;
 
 import com.github.ydespreaux.sample.elasticsearch.model.Album;
 import com.github.ydespreaux.sample.elasticsearch.repositories.AlbumRepository;
+import io.swagger.annotations.Api;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,11 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static com.github.ydespreaux.sample.elasticsearch.web.config.SwaggerConfig.TAG_ARTISTS;
+
 @RestController
 @RequestMapping("/api/albums")
+@Api(tags = TAG_ARTISTS)
 public class AlbumRestController {
 
     @Autowired

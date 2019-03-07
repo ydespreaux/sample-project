@@ -20,8 +20,10 @@
 
 package com.github.ydespreaux.sample.elasticsearch.web.rest;
 
-import com.github.ydespreaux.sample.elasticsearch.model.Label;
-import com.github.ydespreaux.sample.elasticsearch.repositories.LabelRepository;
+import com.github.ydespreaux.sample.elasticsearch.model.Message;
+import com.github.ydespreaux.sample.elasticsearch.model.Topic;
+import com.github.ydespreaux.sample.elasticsearch.model.Vote;
+import com.github.ydespreaux.sample.elasticsearch.repositories.VoteRepository;
 import io.swagger.annotations.Api;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -36,25 +38,25 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static com.github.ydespreaux.sample.elasticsearch.web.config.SwaggerConfig.TAG_ARTISTS;
+import static com.github.ydespreaux.sample.elasticsearch.web.config.SwaggerConfig.TAG_TOPICS;
 
 @RestController
-@RequestMapping("/api/labels")
-@Api(tags = TAG_ARTISTS)
-public class LabelRestController {
+@RequestMapping("/api/votes")
+@Api(tags = TAG_TOPICS)
+public class VoteRestController {
 
     @Autowired
-    private LabelRepository repository;
+    private VoteRepository repository;
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Label> findLabelById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Vote> findTopicById(@PathVariable(name = "id") String id) {
         return this.repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<List<Label>> findLabelByQuery(@RequestParam(required = false, value = "query") String query) {
+    public ResponseEntity<List<? extends Topic>> findByQuery(@RequestParam(required = false, value = "query") String query) {
         QueryBuilder queryBuilder = null;
         if (StringUtils.hasText(query)) {
             queryBuilder = QueryBuilders.matchPhraseQuery("search_fields", query);
@@ -64,9 +66,29 @@ public class LabelRestController {
         return ResponseEntity.ok(this.repository.findByQuery(queryBuilder, Sort.unsorted()/*, Sort.by(Sort.Direction.ASC, "name")*/));
     }
 
-    @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<Label> postAlbum(@RequestBody Label label) {
-        Label document = this.repository.save(label);
+    @GetMapping(value = "/message/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Vote>> findVotesByQuestionId(@PathVariable(name = "id") String messageId, @RequestParam(required = false, value = "query") String query) {
+        QueryBuilder queryBuilder = null;
+        if (StringUtils.hasText(query)) {
+            queryBuilder = QueryBuilders.matchPhraseQuery("search_fields", query);
+        }
+        return ResponseEntity.ok(this.repository.hasParentId(messageId, queryBuilder));
+    }
+
+    @GetMapping(value = "/messages", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<List<Message>> findMessagesByQuery(@RequestParam(required = false, value = "query") String query) {
+        QueryBuilder queryBuilder = null;
+        if (StringUtils.hasText(query)) {
+            queryBuilder = QueryBuilders.matchPhraseQuery("search_fields", query);
+        } else {
+            queryBuilder = QueryBuilders.matchAllQuery();
+        }
+        return ResponseEntity.ok(this.repository.hasChildByQuery(queryBuilder));
+    }
+
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Vote> postVote(@RequestBody Vote vote) {
+        Vote document = this.repository.save(vote);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(document.getId()).toUri();
         return ResponseEntity.created(location).body(document);
     }

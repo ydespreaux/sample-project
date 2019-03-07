@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -34,8 +35,8 @@ import java.util.function.Predicate;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    public static final String TAG_ARTISTS_CONTROLLER = "ArtistRestController";
-    public static final String TAG_ALBUMS_CONTROLLER = "AlbumRestController";
+    public static final String TAG_ARTISTS = "Artists";
+    public static final String TAG_TOPICS = "Topics";
 
     /**
      * Create the private api docket
@@ -44,13 +45,14 @@ public class SwaggerConfig {
      */
     @Bean
     public Docket producerPrivateApi() {
-        Predicate<String> predicateUrl = PathSelectors.regex("/api/artists.*|/api/albums.*")::apply;
+        Predicate<String> predicateUrl = PathSelectors.regex("/api/.*")::apply;
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.github.ydespreaux.sample.elasticsearch.web.rest"))
                 .paths(predicateUrl::test)
                 .build()
-                ;
+                .tags(new Tag(TAG_ARTISTS, "Artists"),
+                        new Tag(TAG_TOPICS, "Topics"));
     }
 
 }
